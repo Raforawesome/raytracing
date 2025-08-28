@@ -1,11 +1,11 @@
 use raytracing::{
-    Vec3,
-    color::{Color3, write_color},
+    Point3, Vec3,
+    color::{Color, write_color},
     ray::Ray,
 };
 
-pub fn ray_color(ray: Ray) -> Color3 {
-    Color3(Vec3(0.0, 0.0, 0.0))
+pub fn ray_color(ray: Ray) -> Color {
+    Color(Vec3(0.0, 0.0, 0.0))
 }
 
 fn main() {
@@ -21,13 +21,13 @@ fn main() {
     println!("P3\n{image_width} {image_height}\n255");
 
     for j in 0..image_height {
-        eprintln!("Scanlines remaining: {}", image_height - j);
+        eprintln!("Lines remaining: {}", image_height - j);
         for i in 0..image_width {
-            let pixel_color: Color3 = Color3(Vec3(
+            let pixel_color: Color = Color::new(
                 i as f64 / (image_width - 1) as f64,
                 j as f64 / (image_height - 1) as f64,
                 0.0,
-            ));
+            );
 
             write_color(pixel_color);
         }
