@@ -12,6 +12,12 @@ pub use vec3::Vec3;
 #[repr(transparent)]
 pub struct Point3(pub Vec3);
 
+impl Point3 {
+    pub fn new(x: f64, y: f64, z: f64) -> Self {
+        Point3(Vec3(x, y, z))
+    }
+}
+
 impl Add<Vec3> for Point3 {
     type Output = Self;
 
