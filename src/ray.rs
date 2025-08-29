@@ -1,4 +1,4 @@
-use crate::{Point3, Vec3};
+use crate::{Point3, Vec3, color::Color};
 
 pub struct Ray {
     origin: Point3,

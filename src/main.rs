@@ -4,12 +4,8 @@ use raytracing::{
     ray::Ray,
 };
 
-pub fn ray_color(ray: Ray) -> Color {
-    Color(Vec3(0.0, 0.0, 0.0))
-}
-
 fn main() {
-    // image
+    // image dimensions
     let aspect_ratio: f64 = 16.0 / 9.0;
     let image_width: i32 = 400;
     let image_height: i32 = ((image_width as f64 / aspect_ratio) as i32).max(1);
