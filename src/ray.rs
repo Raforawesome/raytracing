@@ -39,8 +39,8 @@ impl Ray {
     }
 
     pub fn color(&self) -> Color {
-        const SKY: Color = Color::new(0.5, 0.7, 1.0);
-        const WHITE: Color = Color::new(1.0, 1.0, 1.0);
+        let sky: Color = Color::new(0.5, 0.7, 1.0);
+        let white: Color = Color::new(1.0, 1.0, 1.0);
 
         let t: f64 = self.hit_sphere(Point3::new(0.0, 0.0, -1.0), 0.5);
         if t > 0.0 {
@@ -49,7 +49,7 @@ impl Ray {
         } else {
             let unit_dir = self.dir.unit();
             let t: f64 = 0.5 * (unit_dir.y() + 1.0); // y ∈ [-1, 1] -> y ∈ [0, 1]
-            crate::lerp(WHITE, SKY, t)
+            crate::lerp(white, sky, t)
         }
     }
 }
