@@ -15,7 +15,7 @@ where
     a + (b - a) * t
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Default)]
 #[repr(transparent)]
 /// Point3 is an newtype wrapper over Vec3 to represent a point
 /// in 3D space. In contrast, Vec3 is typically used for raw directions.
