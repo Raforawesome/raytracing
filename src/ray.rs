@@ -37,4 +37,19 @@ impl Ray {
             (-b - discrim.sqrt()) / (2.0 * a)
         }
     }
+
+    pub fn color(&self) -> Color {
+        const SKY: Color = Color::new(0.5, 0.7, 1.0);
+        const WHITE: Color = Color::new(1.0, 1.0, 1.0);
+
+        let t: f64 = self.hit_sphere(Point3::new(0.0, 0.0, -1.0), 0.5);
+        if t > 0.0 {
+            let normal: Vec3 = (self.at(t) - Vec3(0.0, 0.0, -1.0)).unit();
+            Color(normal + 1.0) * 0.5
+        } else {
+            let unit_dir = self.dir.unit();
+            let t: f64 = 0.5 * (unit_dir.y() + 1.0); // y ∈ [-1, 1] -> y ∈ [0, 1]
+            crate::lerp(WHITE, SKY, t)
+        }
+    }
 }
