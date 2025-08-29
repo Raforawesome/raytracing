@@ -23,13 +23,13 @@ fn main() {
     for j in 0..image_height {
         eprintln!("Lines remaining: {}", image_height - j);
         for i in 0..image_width {
-            let pixel_color: Color = Color::new(
-                i as f64 / (image_width - 1) as f64,
-                j as f64 / (image_height - 1) as f64,
-                0.0,
-            );
+            let px_center = px00_loc + (i as f64) * px_du + (j as f64) * px_dv;
+            let ray_dir = px_center - camera_center;
 
-            write_color(pixel_color);
+            let ray: Ray = Ray::new(camera_center, ray_dir);
+
+            let pixel_color: Color = ray.color();
+            write_color(std::io::stdout(), pixel_color);
         }
     }
     eprintln!("Done.\n");
