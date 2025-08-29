@@ -1,4 +1,4 @@
-use std::ops::{AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg};
+use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Vec3(pub f64, pub f64, pub f64);
@@ -90,6 +90,22 @@ impl AddAssign for Vec3 {
     }
 }
 
+impl Add for Vec3 {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Vec3(self.0 + rhs.0, self.1 + rhs.1, self.2 + rhs.2)
+    }
+}
+
+impl Add<f64> for Vec3 {
+    type Output = Self;
+
+    fn add(self, rhs: f64) -> Self::Output {
+        Vec3(self.0 + rhs, self.1 + rhs, self.2 + rhs)
+    }
+}
+
 impl MulAssign<f64> for Vec3 {
     fn mul_assign(&mut self, rhs: f64) {
         self.0 *= rhs;
@@ -103,6 +119,14 @@ impl Mul<f64> for Vec3 {
 
     fn mul(self, rhs: f64) -> Self::Output {
         Vec3(self.0 * rhs, self.1 * rhs, self.2 * rhs)
+    }
+}
+
+impl Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        Vec3(self * rhs.0, self * rhs.1, self * rhs.2)
     }
 }
 
