@@ -7,10 +7,13 @@ use crate::Vec3;
 
 #[derive(Copy, Clone, Debug)]
 #[repr(transparent)]
+/// A newtype wrapper over Vec3 which represents a color. Each
+/// parameter is in the range [0.0, 1.0] and gets converted to
+/// an RGB parameter between 0-255 on write.
 pub struct Color(pub Vec3);
 
 impl Color {
-    pub fn new(r: f64, g: f64, b: f64) -> Self {
+    pub const fn new(r: f64, g: f64, b: f64) -> Self {
         Color(Vec3(r, g, b))
     }
 }
@@ -54,5 +57,5 @@ pub fn write_color(mut out: impl Write, pixel_color: Color) {
     let g_byte: i32 = (255.999_f64 * g) as i32;
     let b_byte: i32 = (255.999_f64 * b) as i32;
 
-    println!("{r_byte} {g_byte} {b_byte}");
+    writeln!(out, "{r_byte} {g_byte} {b_byte}").expect("Valid output file");
 }
