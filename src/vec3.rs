@@ -1,5 +1,7 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Index, IndexMut, Mul, MulAssign, Neg};
 
+use crate::color::Color;
+
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vec3(pub f64, pub f64, pub f64);
 
@@ -143,5 +145,13 @@ impl Div<f64> for Vec3 {
     fn div(self, rhs: f64) -> Self::Output {
         let recip: f64 = 1.0 / rhs;
         self * recip // multiplying by reciprocal is faster than 3 div ops
+    }
+}
+
+impl Add<Color> for Vec3 {
+    type Output = Color;
+
+    fn add(self, rhs: Color) -> Self::Output {
+        Color(self + rhs.0)
     }
 }
