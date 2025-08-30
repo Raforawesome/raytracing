@@ -29,6 +29,7 @@ pub trait Hittable {
 /*
  * Hittable list
  */
+#[derive(Default)]
 pub struct HittableList {
     pub objects: Vec<Box<dyn Hittable>>,
 }
