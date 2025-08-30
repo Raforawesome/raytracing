@@ -1,7 +1,9 @@
 use raytracing::{
     Point3, Vec3,
     color::{Color, write_color},
+    hittable::{Hittable as _, HittableList},
     ray::Ray,
+    sphere::Sphere,
 };
 
 fn main() {
@@ -9,6 +11,11 @@ fn main() {
     let aspect_ratio: f64 = 16.0 / 9.0;
     let image_width: i32 = 400;
     let image_height: i32 = ((image_width as f64 / aspect_ratio) as i32).max(1);
+
+    // world setup
+    let mut world: HittableList = HittableList::default();
+    world.add(Sphere::new(0.0, 0.0, -1.0, 0.5).boxed());
+    world.add(Sphere::new(0.0, -100.5, -1.0, 100.0).boxed());
 
     // camera setup
     let focal_length: f64 = 1.0;
@@ -41,7 +48,7 @@ fn main() {
 
             let ray: Ray = Ray::new(camera_center, ray_dir);
 
-            let pixel_color: Color = ray.color();
+            let pixel_color: Color = ray.color(&world);
             write_color(std::io::stdout(), pixel_color);
         }
     }
