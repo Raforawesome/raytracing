@@ -4,6 +4,8 @@ pub mod ray;
 pub mod sphere;
 pub mod vec3;
 
+pub use std::f64::{INFINITY, consts::PI};
+
 use std::ops::{Add, Mul, Sub};
 
 pub use vec3::Vec3;
@@ -13,6 +15,10 @@ where
     T: Add<Output = T> + Sub<Output = T> + Mul<f64, Output = T> + Copy,
 {
     a + (b - a) * t
+}
+
+pub fn degrees_to_rads(degrees: f64) -> f64 {
+    degrees * PI / 180.0
 }
 
 #[derive(Copy, Clone, Debug, Default)]
