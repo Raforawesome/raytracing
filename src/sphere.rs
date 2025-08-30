@@ -10,7 +10,14 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64) -> Self {
+    pub fn new(x: f64, y: f64, z: f64, r: f64) -> Self {
+        Sphere {
+            center: Point3::new(x, y, z),
+            radius: r.max(0.0),
+        }
+    }
+
+    pub fn from_comps(center: Point3, radius: f64) -> Self {
         Sphere {
             center,
             radius: radius.max(0.0),
