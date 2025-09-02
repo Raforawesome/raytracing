@@ -1,5 +1,6 @@
 use std::f64::{INFINITY, NEG_INFINITY};
 
+#[derive(Debug, Copy, Clone, Default)]
 pub struct Interval {
     pub min: f64,
     pub max: f64,
@@ -7,12 +8,12 @@ pub struct Interval {
 
 // static constant intervals & constructors
 impl Interval {
-    const EMPTY: Interval = Interval {
+    pub const EMPTY: Interval = Interval {
         min: INFINITY,
         max: NEG_INFINITY,
     };
 
-    const UNIVERSE: Interval = Interval {
+    pub const UNIVERSE: Interval = Interval {
         min: NEG_INFINITY,
         max: INFINITY,
     };
