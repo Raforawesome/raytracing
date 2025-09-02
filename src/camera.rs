@@ -1,0 +1,93 @@
+use std::f64::INFINITY;
+
+use crate::{
+    Point3, Vec3,
+    color::{Color, write_color},
+    hittable::Hittable,
+    interval::Interval,
+    ray::Ray,
+};
+
+pub struct Camera {
+    pub image_height: i32,
+    pub image_width: i32,
+    pub aspect_ratio: f64,
+    pub center: Point3,
+    pub px00_loc: Point3,
+    pub px_du: Vec3,
+    pub px_dv: Vec3,
+}
+
+// Public API
+impl Camera {
+    pub fn new(aspect_ratio: f64, image_width: i32) -> Self {
+        // image dimensions
+        // let aspect_ratio: f64 = 16.0 / 9.0;
+        // let image_width: i32 = 400;
+        let image_height: i32 = ((image_width as f64 / aspect_ratio) as i32).max(1);
+
+        // camera setup
+        let focal_length: f64 = 1.0;
+        let center: Point3 = Point3::new(0.0, 0.0, 0.0);
+        let viewport_height: f64 = 2.0;
+        let viewport_width: f64 = viewport_height * (image_width as f64 / image_height as f64);
+
+        // set up viewport vectors
+        let viewport_u: Vec3 = Vec3(viewport_width, 0.0, 0.0);
+        let viewport_v: Vec3 = Vec3(0.0, -viewport_height, 0.0);
+
+        // calculate horizontal/vertical delta vectors between pixels
+        let px_du = viewport_u / image_width as f64;
+        let px_dv = viewport_v / image_height as f64;
+
+        // upper left viewport & pixel coordinates
+        let viewport_upper_left: Point3 =
+            center - Vec3(0.0, 0.0, focal_length) - (viewport_u / 2.0) - (viewport_v / 2.0);
+
+        let px00_loc: Point3 = viewport_upper_left + 0.5 * (px_du + px_dv);
+
+        Self {
+            image_height,
+            image_width,
+            aspect_ratio,
+            center,
+            px00_loc,
+            px_du,
+            px_dv,
+        }
+    }
+
+    pub fn render(&self, world: &impl Hittable) {
+        // render
+        println!("P3\n{} {}\n255", self.image_width, self.image_height);
+
+        for j in 0..self.image_height {
+            eprintln!("Lines remaining: {}", self.image_height - j);
+            for i in 0..self.image_width {
+                let px_center = self.px00_loc + (i as f64) * self.px_du + (j as f64) * self.px_dv;
+                let ray_dir = px_center - self.center;
+
+                let ray: Ray = Ray::new(self.center, ray_dir);
+
+                let pixel_color: Color = self.color(&ray, world);
+                write_color(std::io::stdout(), pixel_color);
+            }
+        }
+        eprintln!("Done.\n");
+    }
+}
+
+// Private API
+impl Camera {
+    pub fn color(&self, ray: &Ray, world: &impl Hittable) -> Color {
+        if let Some(record) = world.hit(ray, Interval::new(0.0, INFINITY)) {
+            (record.normal + Color::new(1.0, 1.0, 1.0)) * 0.5
+        } else {
+            let sky: Color = Color::new(0.5, 0.7, 1.0);
+            let white: Color = Color::new(1.0, 1.0, 1.0);
+            let unit_dir = ray.dir().unit();
+            let t: f64 = 0.5 * (unit_dir.y() + 1.0); // y ∈ [-1, 1] -> y ∈ [0, 1]
+            crate::lerp(white, sky, t)
+        }
+    }
+}
